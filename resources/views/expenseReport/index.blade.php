@@ -25,4 +25,9 @@
                         </table>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col">
+                        <a class="btn btn-secondary" href="/"> Home </a>
+                    </div>
+                </div>
 @endsection

@@ -90,8 +90,9 @@ class ExpenseReportController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ExpenseReport $report)
+    public function update(Request $request, $id)
     {
+        $report = ExpenseReport::findOrFail($id);
         $report->title = $request->get('title');
         $report->save();
 
@@ -104,8 +105,9 @@ class ExpenseReportController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ExpenseReport $report)
+    public function destroy($id)
     {
+        $report = ExpenseReport::findOrFail($id);
         $report->delete();
 
         return redirect('/expense_reports/');
@@ -114,9 +116,9 @@ class ExpenseReportController extends Controller
      * Función diseñada para generar una nueva vista
      * y confirmar que quiere eliminar la entrada
      */
-    public function confirmDelete(ExpenseReport $report)
+    public function confirmDelete($id)
     {
-        //dd('confirmDelete'.$id);
+        $report = ExpenseReport::findOrFail($id);
         return view('expenseReport.confirmDelete', [
             'report' => $report
         ]);
@@ -130,8 +132,25 @@ class ExpenseReportController extends Controller
 
     public function sendMail(Request $request, $id)
     {
+        /*$validData = $request->validate([
+            'description' => 'required | min:3',
+            'amount' => 'numeric'
+
+        ]);
+
+        $expense = new Expense();
+        //$expense->description = $request->get('description');
+        $expense->description = $validData['description'];
+        //$expense->amount = $request->get('amount');
+        $expense->amount = $validData['amount'];
+        $expense->expense_report_id = $expenseReport->id;*/
+
+        $validData = $request->validate([
+            'email' => 'required|email',
+        ]);
+
         $report = ExpenseReport::findOrFail($id);
-        Mail::to($request->get('email'))->send(new SummaryReport($report));
+        Mail::to($validData['email'])->send(new SummaryReport($report));
         return redirect('/expense_reports/' . $id);
     }
 }

@@ -15,8 +15,8 @@
                 <div class="row">
                     <div class="col">
                         <form action="/expense_reports/{{$report->id}}" method="POST">
-                        @csrf
-                        @method('delete')
+                            {{ method_field('DELETE') }}
+                            @csrf
 
                             <br>
                             <button class="btn btn-primary" type="submit" >Delete</button>
